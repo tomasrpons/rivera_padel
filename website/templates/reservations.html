@@ -14,9 +14,7 @@
     <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
     
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -134,17 +132,27 @@
     <div class="site-section bg-light">
       <div class="container">
         <div class="row">
-          <form style="padding-top: 20px; padding-bottom: 20px;" method="POST" autocomplete="off">
-            {% csrf_token %}
-            <input style="margin-left: 50px;" id="datepicker" name=date>
-            <input style="text-align: left" class="btn btn-info btn-md active" type="submit" name="filtrar" value="Filtrar">
-            <button style="margin-left: 580px; margin-right: 50px;"class="btn btn-info btn-md active" type="button" id="formButton">Reservar</button>
-          </form>   
+          <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+            <form style="padding-top: 20px; padding-bottom: 20px;" method="POST" autocomplete="off">
+              {% csrf_token %}
+              <input type="hidden" name="csrfmiddlewaretoken" value="LlMcWB6bENjxwiHW7lYvCYlLmvwE11y1N54326n1sHO2fDPv8rh02orJcl1gYSWx">
+              <p>
+                <label for="id_date_1">Date:</label> 
+                <div class="input-group" id="div_id_date" data-target-input="nearest">
+                  <input type="text" name="date" required="True" id="id_date_1" class="form-control  datetimepicker-input" data-toggle="datetimepicker" data-target="#id_date_1">
+                </div>
+                <script type="text/javascript">function deferDateTimePicker_id_date() {if (window.jQuery && $.fn.datetimepicker) {$('#id_date_1').datetimepicker({"format": "M/D/YYYY", "icons": {"time": "fa fa-clock-o"}});} else {setTimeout(function() { deferDateTimePicker_id_date() }, 50);}}deferDateTimePicker_id_date();</script>
+            </p>
+              <input style="text-align: left" class="btn btn-info btn-md active" type="submit" name="filtrar" value="Filtrar">
+            </form>  
+            <button style="margin-left: 750px; margin-right: 50px;"class="btn btn-info btn-md active" type="button" id="formButton">Reservar</button>
+          </div>
         </div>
+        
         <div class="row" style="float: right;">
           <form style="padding: 30px; display: none; margin-left: 25px;" method="POST" autocomplete="off" id="form1">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ reservation_form.as_p }}
             <button class="btn btn-info btn-md active">Enviar</button>
           </form>
         </div>
@@ -194,13 +202,10 @@
   <script src="{% static 'website/js/jquery.magnific-popup.min.js' %}"></script>
   <script src="{% static 'website/js/bootstrap-datepicker.min.js' %}"></script>
   <script src="{% static 'website/js/aos.js' %}"></script>
-  <script src="{% static 'other\node_modules\@chenfengyuan\datepicker\dist\datepicker.js' %}"></script>
 
   <script src="{% static 'website/js/main.js' %}"></script>
 
   <script>$("#formButton").click(function(){$("#form1").toggle();});</script>
-  <script>$(function () {$("#datepicker").datepicker();});
-  </script>
     
   </body>
 </html>

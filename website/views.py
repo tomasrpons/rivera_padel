@@ -17,11 +17,12 @@ def reservations(request):
         return render(request, "index.html", {'message':'Debe loguearse primero'})
 
     # Ahora verificamos si hizo una consulta
+    
     if request.method == "GET":
-        context = {'reservations':create_empty_context(request), 'form':forms.ReservationForm} 
+        context = {'reservations':create_empty_context(request), 'reservation_form':forms.ReservationForm} 
         return render(request, "reservations.html",context)
     if request.method == "POST":
-        context = {'reservations':create_filled_context(request), 'form':forms.ReservationForm}
+        context = {'reservations':create_filled_context(request), 'reservation_form':forms.ReservationForm}
         return render(request, "reservations.html", context)
 
 
