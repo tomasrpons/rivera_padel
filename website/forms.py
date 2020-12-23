@@ -20,5 +20,5 @@ class ReservationForm(forms.ModelForm):
         self.fields['start_time'].widget.attrs['class'] = 'form-control'
         self.fields['duration'].widget.attrs['class'] = 'form-control'
         self.fields['court'].widget.attrs['class'] = 'form-control'
-        self.fields['date'].widget = DatePicker(options={'minDate': today.strftime('%Y-%m-%d'),'maxDate': max_date.strftime('%Y-%m-%d')})
+        self.fields['date'].widget = DatePicker(options={'minDate': today.strftime('%m-%d-%Y'),'maxDate': max_date.strftime('%m-%d-%Y')})
         

@@ -18,10 +18,10 @@ def reservations(request):
 
     # Ahora verificamos si hizo una consulta
     if request.method == "GET":
-        context = {'reservations':create_empty_context(request)} 
+        context = {'reservations':create_empty_context(request), 'form':forms.ReservationForm} 
         return render(request, "reservations.html",context)
     if request.method == "POST":
-        context = {'reservations':create_filled_context(request)}
+        context = {'reservations':create_filled_context(request), 'form':forms.ReservationForm}
         return render(request, "reservations.html", context)
 
 
