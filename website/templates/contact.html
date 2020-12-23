@@ -1,0 +1,178 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Contacto</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700,900"> 
+
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap-datepicker.css' %}">
+    
+    
+    <link rel="stylesheet" href="{% static 'website/fonts/flaticon/font/flaticon.css' %}">
+  
+    <link rel="stylesheet" href="{% static 'website/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'website/css/style.css' %}">
+
+    <link rel="icon" href="{% static 'website/images/favicon.ico' %}">
+    
+  </head>
+  <body>
+  
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
+    <div class="site-navbar-wrap">
+      <div class="site-navbar-top">
+        <div class="container py-2">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <a href="#" class="p-2 pl-0"><span class="icon-twitter"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-facebook"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-linkedin"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-instagram"></span></a>
+            </div>
+            <div class="col-6">
+              <div class="d-flex ml-auto">
+                <a href="https://wa.me/5493516267863" class="d-flex align-items-center ml-auto mr-4">
+                  <span class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 626 7863</span>
+                </a>
+                <a href="https://wa.me/5493512046022" class="d-flex align-items-center">
+                  <span class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 204 6022</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="site-navbar">
+        <div class="container py-1">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <h2 class="mb-0 site-logo"><a href="/"> </a></h2>
+            </div>
+            <div class="col-10">
+              <nav class="site-navigation text-right" role="navigation">
+                <div class="container">
+                  <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+                  <ul class="site-menu js-clone-nav d-none d-lg-block">
+                    <li><a href="/">Home</a></li>
+                    <li>
+                      <a href="/reservations/">Reservas</a>
+                      {% if message %}
+                      <script>alert("Debe estar logueado para realizar reservas online");</script>
+                      {% endif %}
+                    </li>                    
+                    <li><a href="/contact/">Cont&aacutectenos</a></li>
+                    <li>
+                      {% if request.user.is_authenticated %}
+                         <a href="{% url 'logout' %}">Logout</a>
+                      {% else %}
+                         <a href="{% url 'login' %}">Login</a>
+                      {% endif %}
+                  </li>                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-blocks-cover inner-page" style="background-image: url({% static 'website/images/hero_bg_3.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <span class="sub-text">Sigamos juntos </span>
+            <h1><strong>Contactenos</strong></h1>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-6 pr-md-5 text-left mb-5">
+            <div class="google-maps mb-100">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3408.00519988454!2d-64.29946698424274!3d-31.331229499274528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94329dc9c1ccdc0f%3A0x94a14ec0415ee7ae!2sRivera%20Padel%20Cordoba!5e0!3m2!1ses!2sar!4v1608319541494!5m2!1ses!2sar" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
+          </div>
+
+          <div class="col-md-6 pr-md-5 text-left mb-5">
+            <div>
+              <div style="margin-left: 2cm;" class="google-maps mb-100">
+                <h3 style="margin-top: 0.5cm;">Encuentrenos</h3>
+                <p >Nuestros horarios de atencion son de Lunes a Domingos de 9am a 10pm.</p>
+                <a class="d-flex align-items-center ml-auto mr-4">
+                  <span class="icon-play"></span>
+                  <span style="margin-bottom: 0.7cm;" class="d-none d-md-inline-block">Barreto 9480, Cordoba, Argentina</span>
+                </a>
+                <a href="https://wa.me/5493516267863" class="d-flex align-items-center ml-auto mr-4">
+                  <span style="margin-left: 0.5cm;" class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 626 7863</span>
+                </a>
+                <a href="https://wa.me/5493512046022" class="d-flex align-items-center ml-auto mr-4">
+                  <span style="margin-left: 0.5cm;" class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 204 6022</span>
+                </a>
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-section site-block-3">
+      <div class="row pt-5 mt-5 text-center">
+        <div class="col-md-12">
+          <p>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;<script data-cfasync="false"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery-ui.js' %}"></script>
+  <script src="{% static 'website/js/popper.min.js' %}"></script>
+  <script src="{% static 'website/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'website/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.countdown.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'website/js/bootstrap-datepicker.min.js' %}"></script>
+  <script src="{% static 'website/js/aos.js' %}"></script>
+
+  <script src="{% static 'website/js/main.js' %}"></script>
+    
+  </body>
+</html>

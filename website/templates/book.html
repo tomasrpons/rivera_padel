@@ -1,0 +1,172 @@
+{%load static%}
+{{ value|time:"H:M" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Reservas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700,900"> 
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap-datepicker.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static 'website/fonts/flaticon/font/flaticon.css' %}">
+  
+    <link rel="stylesheet" href="{% static 'website/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'website/css/style.css' %}">
+
+    <link rel="icon" href="{% static 'website/images/favicon.ico' %}">
+    
+  </head>
+  <body>
+  
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
+    <div class="site-navbar-wrap">
+      <div class="site-navbar-top">
+        <div class="container py-2">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <a href="#" class="p-2 pl-0"><span class="icon-twitter"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-facebook"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-linkedin"></span></a>
+              <a href="#" class="p-2 pl-0"><span class="icon-instagram"></span></a>
+            </div>
+            <div class="col-6">
+              <div class="d-flex ml-auto">
+                <a href="https://wa.me/5493516267863" class="d-flex align-items-center ml-auto mr-4">
+                  <span class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 626 7863</span>
+                </a>
+                <a href="https://wa.me/5493512046022" class="d-flex align-items-center">
+                  <span class="flaticon-whatsapp mr-2"></span>
+                  <span class="d-none d-md-inline-block">+54 9 351 204 6022</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="site-navbar">
+        <div class="container py-1">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <h2 class="mb-0 site-logo"><a href="/"> </a></h2>
+            </div>
+            <div class="col-10">
+              <nav class="site-navigation text-right" role="navigation">
+                <div class="container">
+                  <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+                  <ul class="site-menu js-clone-nav d-none d-lg-block">
+                    <li><a href="/">Home</a></li>
+                    <li>
+                      <a href="/reservations/">Reservas</a>
+                      {% if message %}
+                      <script>alert("Debe estar logueado para realizar reservas online");</script>
+                      {% endif %}
+                    </li>                    <li><a href="/contact/">Cont&aacutectenos</a></li>
+                    <li>
+                      {% if request.user.is_authenticated %}
+                         <a href="{% url 'logout' %}">Logout</a>
+                      {% else %}
+                         <a href="{% url 'login' %}">Login</a>
+                      {% endif %}
+                  </li>                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-blocks-cover inner-page" style="background-image: url({% static 'website/images/hero_bg_2.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <span class="sub-text">Haga su</span>
+            <h1>Reserva<strong>Online</strong></h1>         
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="form-group">
+          <form style="padding: 30px;" method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-info btn-md active">Reservar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-section site-block-3">
+      <div class="row pt-5 mt-5 text-center">
+        <div class="col-md-12">
+          <p>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;<script data-cfasync="false"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery-ui.js' %}"></script>
+  <script src="{% static 'website/js/popper.min.js' %}"></script>
+  <script src="{% static 'website/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'website/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.countdown.min.js' %}"></script>
+  <script src="{% static 'website/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'website/js/bootstrap-datepicker.min.js' %}"></script>
+  <script src="{% static 'website/js/aos.js' %}"></script>
+  <script src="{% static 'other\node_modules\@chenfengyuan\datepicker\dist\datepicker.js' %}"></script>
+
+  <script src="{% static 'website/js/main.js' %}"></script>
+    
+  </body>
+</html>
