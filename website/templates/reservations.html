@@ -136,7 +136,7 @@
         <div class="row">
           <form style="padding-top: 20px; padding-bottom: 20px;" method="POST" autocomplete="off">
             {% csrf_token %}
-            <input style="margin-left: 50px;" id="datepicker" name=date>
+            <input style="margin-left: 50px;" id="datepicker" name="date_filter">
             <input style="text-align: left" class="btn btn-info btn-md active" type="submit" name="filtrar" value="Filtrar">
             <button style="margin-left: 580px; margin-right: 50px;"class="btn btn-info btn-md active" type="button" id="formButton">Reservar</button>
           </form>   
@@ -145,7 +145,7 @@
           <form style="padding: 30px; display: none; margin-left: 25px;" method="POST" autocomplete="off" id="form1">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="btn btn-info btn-md active">Enviar</button>
+            <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
           </form>
         </div>
      
@@ -177,6 +177,13 @@
           Copyright &copy;<script data-cfasync="false"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
           <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
           </p>
+          {% if form.errors %}
+            {% for field in form %}
+              {% for error in field.errors %}
+                <p> {{ error }} </p>
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
         </div>
         
       </div>
