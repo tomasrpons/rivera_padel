@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from website.models import Reservation, Customer
+from website.models import Reservation, Customer, Court
 import pandas as pd
 from datetime import date as dt, datetime, time, timedelta
 from django.db.models import Q
@@ -21,9 +21,26 @@ def reservations(request):
     if request.method == "GET":
         context = {'reservations':create_empty_context(request), 'reservation_form':forms.ReservationForm} 
         return render(request, "reservations.html",context)
-    if request.method == "POST":
-        context = {'reservations':create_filled_context(request), 'reservation_form':forms.ReservationForm}
+    elif request.method == "POST" and 'filtrar' in request.POST:
+        context = {'reservations':create_filled_context(request), 'form':forms.ReservationForm}
         return render(request, "reservations.html", context)
+    elif request.method == "POST" and 'reservar' in request.POST:
+        form = forms.ReservationForm(request.POST)
+        if form.is_valid():
+            reservation = form.save(commit=False)
+            customers = Customer.objects.all()
+            customer = customers.get(user=request.user)
+            reservation.customer = customer
+            reservation.save()
+            context = {'reservations':create_empty_context(request), 'form':forms.ReservationForm} 
+            return render(request, "reservations.html",context)
+        print(form.errors)
+        context = {'reservations':create_empty_context(request), 'form':forms.ReservationForm} 
+        return render(request, "reservations.html",context)
+
+    else:
+        context = {'reservations':create_empty_context(request), 'form':forms.ReservationForm} 
+        return render(request, "reservations.html",context)
 
 
 def contact(request):
@@ -60,8 +77,8 @@ def create_empty_context(request):
 
 def create_filled_context(request):
 
-    if 'date' in request.POST and request.POST.get('date') != '':
-        date = request.POST.get('date')
+    if 'date_filter' in request.POST and request.POST.get('date_filter') != '':
+        date = request.POST.get('date_filter')
         index = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00',
         '14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00',
         '19:30','20:00','20:30','21:00','21:30','22:00']
