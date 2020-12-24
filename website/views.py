@@ -17,12 +17,13 @@ def reservations(request):
         return render(request, "index.html", {'message':'Debe loguearse primero'})
 
     # Ahora verificamos si hizo una consulta
+    form = forms.ReservationForm()
     
     if request.method == "GET":
-        context = {'reservations':create_empty_context(request), 'reservation_form':forms.ReservationForm} 
+        context = {'reservations':create_empty_context(request), 'form':form} 
         return render(request, "reservations.html",context)
     elif request.method == "POST" and 'filtrar' in request.POST:
-        context = {'reservations':create_filled_context(request), 'form':forms.ReservationForm}
+        context = {'reservations':create_filled_context(request), 'form':form}
         return render(request, "reservations.html", context)
     elif request.method == "POST" and 'reservar' in request.POST:
         form = forms.ReservationForm(request.POST)
@@ -93,8 +94,8 @@ def create_filled_context(request):
         data = []
         df = df.fillna(' ')
         for reservation in reservations:
-            end_time = datetime.combine(dt.today(), reservation.start_time) + reservation.duration
-            df.loc[reservation.start_time.strftime("%H:%M"):end_time.time().strftime("%H:%M"), reservation.court.court_id] = reservation.customer.first_name + ' ' +reservation.customer.last_name
+            end_time = datetime.combine(dt.today(), reservation.start_time.start_time) + reservation.duration.duration
+            df.loc[reservation.start_time.start_time.strftime("%H:%M"):end_time.time().strftime("%H:%M"), reservation.court.court_id] = reservation.customer.first_name + ' ' +reservation.customer.last_name
         for i in range(df.shape[0]):
             row = df.iloc[i]
             data.append(dict(row))
