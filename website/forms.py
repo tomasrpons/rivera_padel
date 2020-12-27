@@ -7,7 +7,7 @@ from django.urls import reverse
 
 
 today = dt.now()
-delta = timedelta(days=7)
+delta = timedelta(days=14)
 max_date = today + delta
 
 
@@ -27,4 +27,8 @@ class ReservationForm(forms.ModelForm):
         self.fields['court'].widget.attrs['class'] = 'form-control'
         self.fields['date'].widget.attrs['class'] = 'form-control'
 
-        self.fields['date'].widget = DatePicker(options={'minDate': today.strftime('%m-%d-%Y'),'maxDate': max_date.strftime('%m-%d-%Y')})
+        self.fields['date'].widget = DatePicker(options={'minDate': today.strftime('%m-%d-%Y'),'maxDate': max_date.strftime('%m-%d-%Y')}, attrs={'id':'reservations_date'})
+
+
+class FilteringForm(forms.Form):
+    filtering_date = forms.DateField(widget=DatePicker(attrs={'id':'filtering_date'}),label="", help_text="")

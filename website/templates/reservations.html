@@ -13,9 +13,6 @@
     <link rel="stylesheet" href="{% static 'website/css/jquery-ui.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     
     <!-- Bootstrap 4 -->
@@ -99,7 +96,7 @@
                     <li>
                       <a style="color: whitesmoke;" href="/reservations/">Reservas</a>
                       {% if message %}
-                      <script>alert('{{ message }}');</script>
+                      <script>alert("{{ message }}");</script>
                       {% endif %}
                     </li>
                     <li><a style="color: whitesmoke;" href="/contact/">Cont&aacutectenos</a></li>
@@ -139,7 +136,7 @@
             {% csrf_token %}
             <div class="row g-3 align-items-center">
               <div class="col-auto">
-                <input class="col-auto" id="datepicker" name=date_filter>
+                {{ filtering_form.as_p}}
               </div>
               <div class="col-auto">
                 <input class="btn btn-info btn-md active" type="submit" name="filtrar" value="Buscar">
@@ -211,19 +208,16 @@
   <script src="{% static 'website/js/jquery.stellar.min.js' %}"></script>
   <script src="{% static 'website/js/jquery.countdown.min.js' %}"></script>
   <script src="{% static 'website/js/jquery.magnific-popup.min.js' %}"></script>
-  <script src="{% static 'website/js/bootstrap-datepicker.min.js' %}"></script>
   <script src="{% static 'website/js/aos.js' %}"></script>
-  <script src="{% static 'other\node_modules\@chenfengyuan\datepicker\dist\datepicker.js' %}"></script>
 
 
   <script src="{% static 'website/js/main.js' %}"></script>
 
-  <script>$("#formButton").click(function(){$("#form1").toggle();});</script>
   <script>
     function load_start() {
       const url = $("#form1").attr("data-start_time-url");
         const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("id_date").value;
+        const DateId = document.getElementById("reservations_date").value;
 
         $.ajax({     
             url: url,
@@ -240,7 +234,7 @@
     function load_durations() {
       const url = $("#form1").attr("data-duration-url");
         const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("id_date").value;
+        const DateId = document.getElementById("reservations_date").value;
         const StartId = document.getElementById("id_start_time").value;
 
         $.ajax({     
@@ -258,15 +252,13 @@
 
     function listenForChanges(){
       $('#id_court').change(load_start);
-      $('#id_date').change(load_start);
+      $('#reservations_date').on("changeDate", load_start);
       $('#id_start_time').change(load_durations);
     }
 
     $(document).ready(listenForChanges);
 
-  </script>
-
-  <script>$(function () {$("#datepicker").datepicker();});</script>
+  </script>  
     
   </body>
 </html>
