@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from website.models import Reservation, Customer, Court
+from website.models import Reservation, Customer, Court, StartTime, MatchDuration
 import pandas as pd
 from datetime import date as dt, datetime, time, timedelta
 from django.db.models import Q
@@ -31,6 +31,12 @@ def reservations(request):
             reservation = form.save(commit=False)
             customers = Customer.objects.all()
             customer = customers.get(user=request.user)
+
+            if Reservation.objects.filter(date=form['date'].value(), customer=customer).count() >= 3:
+                message = "No se permiten más de 3 reservas al día por cliente."
+                return render(request, "reservations.html", {'reservations':create_filled_context(request), 
+                                                            'form':forms.ReservationForm, 'current_date':get_date(request),
+                                                            'message':message})
             reservation.customer = customer
             reservation.save()
             context = {'reservations':create_filled_context(request), 'form':forms.ReservationForm, 'current_date':get_date(request)} 
@@ -139,3 +145,71 @@ def get_date(request):
         date = datetime.now()
         return str(date.day)+'/'+str(date.month)+'/'+str(date.year)
         
+
+    # AJAX
+def load_start_times(request):
+    if request.GET.get('id_date') != '' and request.GET.get('id_court') != '':
+        court_id = request.GET.get('id_court')
+        date = request.GET.get('id_date')
+        available_start_times = get_available_start_times(court_id, date)
+
+        return render(request, 'start_time_dropdown_list_options.html', {'start_times': available_start_times})
+    
+    else:
+        return render(request, 'start_time_dropdown_list_options.html', {'start_times': []})
+
+    # AJAX
+def load_durations(request):
+    if request.GET.get('id_date') != '' and request.GET.get('id_court') != '' and request.GET.get('id_start_time') != '':
+        court_id = request.GET.get('id_court')
+        date = request.GET.get('id_date')
+        start_time_id = int(request.GET.get('id_start_time'))
+        available_durations = get_available_durations(court_id, date, start_time_id)
+
+        return render(request, 'durations_dropdown_list_options.html', {'durations': available_durations})
+    
+    else:
+        return render(request, 'durations_dropdown_list_options.html', {'durations': []})
+
+def get_available_start_times(court_id, date):
+
+    form_start_times = Reservation.objects.filter(court_id=court_id, date=date).values('start_time')
+    durations = Reservation.objects.filter(court_id=court_id, date=date).values('duration')
+    available_start_times = StartTime.objects.exclude(start_time_id__in=form_start_times).only('start_time')
+    
+    zipped = list(zip(form_start_times, durations))
+
+    for start, duration in zipped:
+        if duration.get('duration') == 1:
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+1)
+
+        if duration.get('duration') == 2:
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+1)
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+2)
+            
+        if duration.get('duration') == 3:
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+1)
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+2)
+            available_start_times = available_start_times.exclude(start_time_id=start.get('start_time')+3)
+
+    return available_start_times
+
+def get_available_durations(court_id, date, start_time_id):
+
+    durations = MatchDuration.objects.all()
+    available_start_times = get_available_start_times(court_id, date)
+
+    if available_start_times.filter(start_time_id=start_time_id+3).exists() and available_start_times.filter(start_time_id=start_time_id+2).exists()\
+        and available_start_times.filter(start_time_id=start_time_id+1).exists():
+        return durations
+
+    elif available_start_times.filter(start_time_id=start_time_id+2).exists() and available_start_times.filter(start_time_id=start_time_id+1).exists():
+        durations = durations.exclude(duration_id=3)
+
+    elif available_start_times.filter(start_time_id=start_time_id+1).exists():
+        durations = durations.exclude(duration_id=3)
+        durations = durations.exclude(duration_id=2)
+
+    else:
+        durations = MatchDuration.objects.none()
+    return durations

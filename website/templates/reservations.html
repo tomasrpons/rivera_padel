@@ -99,7 +99,7 @@
                     <li>
                       <a style="color: whitesmoke;" href="/reservations/">Reservas</a>
                       {% if message %}
-                      <script>alert("Debe estar logueado para realizar reservas online");</script>
+                      <script>alert('{{ message }}');</script>
                       {% endif %}
                     </li>
                     <li><a style="color: whitesmoke;" href="/contact/">Cont&aacutectenos</a></li>
@@ -144,7 +144,7 @@
               <div class="col-auto">
                 <input class="btn btn-info btn-md active" type="submit" name="filtrar" value="Buscar">
               </div>
-              <div class="form-text" >
+              <div class="form-text" style="color: #8f8f8f;">
                   Introduzca la fecha que desea buscar.
               </div>
               <div style="padding-right: 60px; font-size: 40px; font-weight: bold; margin-left: 150px;" class="form-text" >
@@ -155,7 +155,7 @@
         </div>
         
         <div class="row" style="float: right;">
-          <form style="padding: 30px; margin-left: 25px; margin-top: 35px;" method="POST" autocomplete="off" id="form1">
+          <form style="padding: 30px; margin-left: 25px; margin-top: 35px;" method="POST" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
@@ -219,8 +219,54 @@
   <script src="{% static 'website/js/main.js' %}"></script>
 
   <script>$("#formButton").click(function(){$("#form1").toggle();});</script>
-  <script>$(function () {$("#datepicker").datepicker();});
+  <script>
+    function load_start() {
+      const url = $("#form1").attr("data-start_time-url");
+        const CourtId = document.getElementById("id_court").value;
+        const DateId = document.getElementById("id_date").value;
+
+        $.ajax({     
+            url: url,
+            data: {
+                'id_court': CourtId,
+                'id_date': DateId
+              },
+            success: function (data) {
+                $("#id_start_time").html(data);
+            }
+        });
+    }
+
+    function load_durations() {
+      const url = $("#form1").attr("data-duration-url");
+        const CourtId = document.getElementById("id_court").value;
+        const DateId = document.getElementById("id_date").value;
+        const StartId = document.getElementById("id_start_time").value;
+
+        $.ajax({     
+            url: url,
+            data: {
+                'id_court': CourtId,
+                'id_date': DateId,
+                'id_start_time': StartId
+              },
+            success: function (data) {
+                $("#id_duration").html(data);
+            }
+        });
+    }
+
+    function listenForChanges(){
+      $('#id_court').change(load_start);
+      $('#id_date').change(load_start);
+      $('#id_start_time').change(load_durations);
+    }
+
+    $(document).ready(listenForChanges);
+
   </script>
+
+  <script>$(function () {$("#datepicker").datepicker();});</script>
     
   </body>
 </html>

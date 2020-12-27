@@ -34,7 +34,7 @@ class MatchDuration(models.Model):
     duration = models.DurationField(verbose_name='Duracion')
 
     def __str__(self):
-        return str(self.duration)
+        return str(self.duration + dt.timedelta(minutes=30))
 
 class Reservation(models.Model):
     reservation_id = models.AutoField(primary_key=True)
