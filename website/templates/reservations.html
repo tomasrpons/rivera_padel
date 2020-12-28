@@ -1,8 +1,8 @@
 {%load static%}
-{{ value|time:"H:M" }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <title>Reservas</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,33 +13,12 @@
     <link rel="stylesheet" href="{% static 'website/css/jquery-ui.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    
-    <!-- Bootstrap 4 -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
-    <!-- Font Awesome -->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-    <!-- Moment.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
-
-    <!-- Tempus Dominus Bootstrap 4 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
-
-
-    <link rel="stylesheet" href="{% static 'website/fonts/flaticon/font/flaticon.css' %}">
-  
+    <link rel="stylesheet" href="{% static 'website/fonts/flaticon/font/flaticon.css' %}">  
     <link rel="stylesheet" href="{% static 'website/css/aos.css' %}">
-
     <link rel="stylesheet" href="{% static 'website/css/style.css' %}">
-
     <link rel="icon" href="{% static 'website/images/favicon.ico' %}">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
   </head>
   <body>
@@ -131,50 +110,64 @@
 
     <div class="site-section bg-light">
       <div class="container">
-        <div class="row">
-          <form  style="margin-left: 15px; padding-left: 30px; padding-top: 30px; padding-bottom: 30px;" method="POST" autocomplete="off">
-            {% csrf_token %}
-            <div class="row g-3 align-items-center">
-              <div class="col-auto">
-                {{ filtering_form.as_p}}
-              </div>
-              <div class="col-auto">
-                <input class="btn btn-info btn-md active" type="submit" name="filtrar" value="Buscar">
-              </div>
-              <div class="form-text" style="color: #8f8f8f;">
-                  Introduzca la fecha que desea buscar.
-              </div>
-              <div style="padding-right: 60px; font-size: 40px; font-weight: bold; margin-left: 150px;" class="form-text" >
-                {{ current_date }}
-              </div>
+        <form style="padding: 2%;" method="POST" autocomplete="off">
+          {% csrf_token %}
+          <div class="row g-3 align-items-center">
+            <div class="col-auto" style="padding-top: 2%;">
+              {{ filtering_form.as_p }}
             </div>
-          </form>  
-        </div>
-        
-        <div class="row" style="float: right;">
-          <form style="padding: 30px; margin-left: 25px; margin-top: 35px;" method="POST" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
-          </form>
+            <div class="col-auto form-text">
+              <input class="btn btn-info btn-md active" type="submit" name="filtrar" value="Buscar">
+            </div>
+            <div class="col-auto form-text" style="color: #8f8f8f;">
+                Introduzca la fecha que desea buscar.
+            </div>
+            <div class="col form-text text-right" style="font-weight: bold; font-size: xx-large;" >
+              {{ current_date }}
+            </div>
+          </div>
+        </form> 
+
+        <div class="row row-cols-auto" style="margin-top: 2%;">
+          <div class="col">
+            <div class="center">
+              <table class="fixed" style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
+                <td width="50px">Hora</td>
+                <td width="353px">Cancha Techada</td>
+                <td width="353px">Cancha Sint&eacutetico</td>
+                <td width="353px">Cancha Cemento</td>
+                {% for reservation in reservations %}
+                <tr>
+                  <td>{{reservation.time}}</td>
+                  <td>{{reservation.1}}</td>
+                  <td>{{reservation.2}}</td>
+                  <td>{{reservation.3}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+          <div class="col col-md-3">
+            <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
+              {% csrf_token %}
+              {{ form.as_p}}
+              <script>
+                $(function() {
+                  $( ".datepicker" ).datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "1900:2012",
+              
+                  });
+                });
+                </script>
+              <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
+            </form>
+          </div>
+
         </div>
 
-          <div style="margin-top: 40px;" class="center">
-            <table class="fixed" style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
-              <td width="50px">Hora</td>
-              <td width="353px">Cancha Techada</td>
-              <td width="353px">Cancha Sint&eacutetico</td>
-              <td width="353px">Cancha Cemento</td>
-              {% for reservation in reservations %}
-              <tr>
-                <td>{{reservation.time}}</td>
-                <td>{{reservation.1}}</td>
-                <td>{{reservation.2}}</td>
-                <td>{{reservation.3}}</td>
-              </tr>
-              {% endfor %}
-            </table>
-          </div>
+
       </div>
     </div>
     
@@ -199,9 +192,7 @@
     </div>
   </div>
 
-  <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
   <script src="{% static 'website/js/jquery-migrate-3.0.1.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery-ui.js' %}"></script>
   <script src="{% static 'website/js/popper.min.js' %}"></script>
   <script src="{% static 'website/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'website/js/owl.carousel.min.js' %}"></script>
@@ -217,7 +208,7 @@
     function load_start() {
       const url = $("#form1").attr("data-start_time-url");
         const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("reservations_date").value;
+        const DateId = document.getElementById("id_reservations_date").value;
 
         $.ajax({     
             url: url,
@@ -234,7 +225,7 @@
     function load_durations() {
       const url = $("#form1").attr("data-duration-url");
         const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("reservations_date").value;
+        const DateId = document.getElementById("id_reservations_date").value;
         const StartId = document.getElementById("id_start_time").value;
 
         $.ajax({     
@@ -252,11 +243,13 @@
 
     function listenForChanges(){
       $('#id_court').change(load_start);
-      $('#reservations_date').on("changeDate", load_start);
+      $('#id_reservations_date').change(load_start);
       $('#id_start_time').change(load_durations);
     }
 
     $(document).ready(listenForChanges);
+
+
 
   </script>  
     

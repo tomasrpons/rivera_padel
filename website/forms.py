@@ -1,6 +1,5 @@
 from django import forms
 from .models import Reservation, Customer, StartTime, MatchDuration, Court
-from tempus_dominus.widgets import DatePicker
 from datetime import datetime as dt
 from datetime import timedelta
 from django.urls import reverse
@@ -15,6 +14,7 @@ class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
         fields = ('court','date','start_time','duration')
+        widgets = {'date' : forms.DateInput(attrs={'type':'date', 'class':'form-control', 'id':'id_reservations_date'})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,11 +24,10 @@ class ReservationForm(forms.ModelForm):
 
         self.fields['start_time'].widget.attrs['class'] = 'form-control'
         self.fields['duration'].widget.attrs['class'] = 'form-control'
-        self.fields['court'].widget.attrs['class'] = 'form-control'
-        self.fields['date'].widget.attrs['class'] = 'form-control'
-
-        self.fields['date'].widget = DatePicker(options={'minDate': today.strftime('%m-%d-%Y'),'maxDate': max_date.strftime('%m-%d-%Y')}, attrs={'id':'reservations_date'})
+        self.fields['court'].widget.attrs['class'] = 'form-control'        
 
 
 class FilteringForm(forms.Form):
-    filtering_date = forms.DateField(widget=DatePicker(attrs={'id':'filtering_date'}),label="", help_text="")
+    filtering_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date','class':'form-control','id':'id_filtering_date'}),label="", help_text="")
+
+    

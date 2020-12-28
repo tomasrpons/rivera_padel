@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'users',
     'widget_tweaks',
     'django.forms',
-    'tempus_dominus'
+    "bootstrap4",
+    "bootstrap_datepicker_plus",
 
 ]
 
