@@ -130,6 +130,23 @@
         </form> 
 
         <div class="row row-cols-auto" style="margin-top: 2%;">
+          <div class="col col-md-3">
+            <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
+              {% csrf_token %}
+              {{ form.as_p}}
+              <script>
+                $(function() {
+                  $( ".datepicker" ).datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "1900:2012",
+              
+                  });
+                });
+                </script>
+              <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
+            </form>
+          </div>
           <div class="col">
             <div class="center">
               <table class="fixed" style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
@@ -148,24 +165,6 @@
               </table>
             </div>
           </div>
-          <div class="col col-md-3">
-            <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
-              {% csrf_token %}
-              {{ form.as_p}}
-              <script>
-                $(function() {
-                  $( ".datepicker" ).datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    yearRange: "1900:2012",
-              
-                  });
-                });
-                </script>
-              <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
-            </form>
-          </div>
-
         </div>
 
 
