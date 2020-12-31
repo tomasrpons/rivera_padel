@@ -116,16 +116,15 @@
             {% csrf_token %}
             <div class="form-group row">
               <div class="col-md-3">
+                <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#ReservationModal" data-whatever="@mdo" style="margin-bottom: 3%;">Nueva Reserva</button>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#DeleteReservationsModal" data-whatever="@fat" style="margin-bottom: 3%;">Mis Reservas</button>              </div>
+              <div class="col-md-3">
                 {{ filtering_form.as_p }}
               </div>
               <div class="col-md-3">
                 <input class="btn btn-info btn-md active btn-block" type="submit" name="filtrar" value="Buscar">
-              </div>
-              <div class="col-auto form-text" style="color: #8f8f8f;">
-                  Introduzca la fecha que desea buscar.
-              </div>
-              <div class="col form-text text-right" style="font-weight: bold; font-size: xx-large;" >
-                {{ current_date }}
               </div>
             </div>
           </form> 
@@ -133,62 +132,100 @@
 
 
         <div class="row row-cols-auto" style="margin-top: 2%;">
-          <div class="col col-md-3">
-            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style="margin-bottom: 3%;">Nueva Reserva</button>
-            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat" style="margin-bottom: 3%;">Mis Reservas</button>
-
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Nueva Reserva</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
-                      {% csrf_token %}
-                      {{ form.as_p}}
-                      <script>
-                        $(function() {
-                          $( ".datepicker" ).datepicker({
-                            changeMonth: true,
-                            changeYear: true,
-                            yearRange: "1900:2012",
-                      
-                          });
+          <div class="modal fade" id="ReservationModal" tabindex="-1" role="dialog" aria-labelledby="ReservationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ReservationModalLabel">Nueva Reserva</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
+                    {% csrf_token %}
+                    {{ form.as_p}}
+                    <script>
+                      $(function() {
+                        $( ".datepicker" ).datepicker({
+                          changeMonth: true,
+                          changeYear: true,
+                          yearRange: "1900:2012",
+                    
                         });
-                        </script>
-                      <button class="btn btn-info btn-md active" name="reservar">Enviar</button>
-                      <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
-                    </form>
-                  </div>
+                      });
+                      </script>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-info btn-md active  float-right" name="reservar">Reservar</button>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="center">
-              <table class="table-responsive" style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
-                <td width="50px">Hora</td>
-                <td width="353px">Cancha Techada</td>
-                <td width="353px">Cancha Sint&eacutetico</td>
-                <td width="353px">Cancha Cemento</td>
-                {% for reservation in reservations %}
-                <tr>
-                  <td>{{reservation.time}}</td>
-                  <td>{{reservation.1}}</td>
-                  <td>{{reservation.2}}</td>
-                  <td>{{reservation.3}}</td>
-                </tr>
-                {% endfor %}
-              </table>
+          <div class="modal fade" id="DeleteReservationsModal" tabindex="-1" role="dialog" aria-labelledby="DeleteReservationsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="DeleteReservationsModalLabel">Mis Reservas</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST"> {% csrf_token %}
+                    <table style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>D&iacutea</td>
+                          <th>Cancha</td>
+                          <th>Horario</td>
+                          <th>Duraci&oacuten</td>
+                          <th>Eliminar</th>
+                        </tr>
+                      </thead>
+                      {% for my_reservation in my_reservations %}
+                      <tr>
+                        <td>{{my_reservation.date}}</td>
+                        <td>{{my_reservation.court}}</td>
+                        <td>{{my_reservation.start_time}}</td>
+                        <td>{{my_reservation.duration}}</td>
+                        <td><a href="{% url 'delete_reservation' my_reservation.reservation_id %}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-remove"></span>Eliminar</a>
+                      </td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </form>
+                  <button style="margin-top: 2%;" type="button" class="btn btn-danger float-right" data-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-
+        <div class="col">
+          <div class="col form-text text-right" style="font-weight: bold; font-size: xx-large;" >
+            {{ current_date }}
+          </div>
+          <div >
+            <table style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
+              <thead>
+                <tr>
+                  <th width="50px">Hora</td>
+                  <th width="353px">Cancha Techada</td>
+                  <th width="353px">Cancha Sint&eacutetico</td>
+                  <th width="353px">Cancha Cemento</td>
+                </tr>
+              </thead>
+              {% for reservation in reservations %}
+              <tr>
+                <td>{{reservation.time}}</td>
+                <td>{{reservation.1}}</td>
+                <td>{{reservation.2}}</td>
+                <td>{{reservation.3}}</td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
       </div>
     </div>
     

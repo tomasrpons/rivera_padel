@@ -15,47 +15,66 @@ def reservations(request):
     # Si no esta logueado lo redireccionamos al login
     if request.user.is_authenticated == False:
         return render(request, "index.html", {'message':'Debe loguearse primero'})
+    customers = Customer.objects.all()
+    customer = customers.get(user=request.user)
+    my_reservations = Reservation.objects.filter(customer=customer, date__gte=datetime.today())
 
     # Ahora verificamos si hizo una consulta
     form = forms.ReservationForm()
+
+    reservations = Reservation.objects.all()
     
     if request.method == "GET":
         context = {'reservations':create_empty_context(request), 'form':form, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm()} 
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+
         return render(request, "reservations.html",context)
     elif request.method == "POST" and 'filtrar' in request.POST:
         context = {'reservations':create_filled_context(request, request.POST.get('filtering_date')), 'form':form, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm()}
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+
         return render(request, "reservations.html", context)
     elif request.method == "POST" and 'reservar' in request.POST:
         form = forms.ReservationForm(request.POST)
         if form.is_valid():
             reservation = form.save(commit=False)
-            customers = Customer.objects.all()
-            customer = customers.get(user=request.user)
 
             if Reservation.objects.filter(date=form['date'].value(), customer=customer).count() >= 3:
                 message = "No se permiten más de 3 reservas al día por cliente."
-                return render(request, "reservations.html", {'reservations':create_filled_context(request, form['date'].value()), 
+                context = {'reservations':create_filled_context(request, form['date'].value()), 
                                                             'form':forms.ReservationForm, 'current_date':get_date(request),
-                                                            'message':message, 'filtering_form':forms.FilteringForm()})
+                                                            'message':message, 'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+
+                return render(request, "reservations.html", context)
+
             reservation.customer = customer
             reservation.save()
             context = {'reservations':create_filled_context(request, form['date'].value()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                        'filtering_form':forms.FilteringForm()} 
+                        'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+
             return render(request, "reservations.html",context)
         context = {'reservations':create_filled_context(request, form['date'].value()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm()} 
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+
         return render(request, "reservations.html",context)
 
     else:
         context = {'reservations':create_filled_context(request, datetime.now()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm()} 
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+
         return render(request, "reservations.html",context)
 
 
 def contact(request):
     return render(request, 'contact.html', {})
+
+def delete_reservation(request, pk):
+    if request.user.is_authenticated == False:
+        return render(request, "index.html", {'message':'Debe loguearse primero'})
+
+    reservation = Reservation.objects.get(reservation_id=pk)
+    reservation.delete()
+    return redirect('/reservations/')
 
 
 def create_filled_context(request, date):
@@ -110,8 +129,8 @@ def get_date(request):
     if 'filtering_date' in request.POST and request.POST.get('filtering_date') != '':
         date = datetime.strptime(request.POST.get('filtering_date'), '%Y-%m-%d')
         return str(date.day)+'/'+str(date.month)+'/'+str(date.year)
-    elif 'reservations_date' in request.POST and request.POST.get('reservations_date') != '':
-        date = datetime.strptime(request.POST.get('reservations_date'), '%Y-%m-%d')
+    elif 'id_reservations_date' in request.POST and request.POST.get('id_reservations_date') != '':
+        date = datetime.strptime(request.POST.get('id_reservations_date'), '%Y-%m-%d')
         return str(date.day)+'/'+str(date.month)+'/'+str(date.year)
     else:
         date = datetime.now()
