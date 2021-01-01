@@ -27,14 +27,18 @@ class StartTime(models.Model):
     start_time = models.TimeField(verbose_name='Hora de Inicio')
 
     def __str__(self):
-        return str(self.start_time)
+        if self.start_time.minute == 0:
+            return str(self.start_time.hour)+'h'+'00'
+        else:
+            return str(self.start_time.hour)+'h'+str(self.start_time.minute)
 
 class MatchDuration(models.Model):
     duration_id = models.AutoField(primary_key=True)
     duration = models.DurationField(verbose_name='Duracion')
 
     def __str__(self):
-        return str(self.duration + dt.timedelta(minutes=30))
+        time = self.duration + dt.timedelta(minutes=30)
+        return 'h'.join(str(time).split(':')[:2])
 
 class Reservation(models.Model):
     reservation_id = models.AutoField(primary_key=True)
