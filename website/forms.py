@@ -26,7 +26,7 @@ class ReservationForm(forms.ModelForm):
 
         self.fields['start_time'].widget.attrs['class'] = 'form-control'
         self.fields['duration'].widget.attrs['class'] = 'form-control'
-        self.fields['court'].widget.attrs['class'] = 'form-control'        
+        self.fields['court'].widget.attrs['class'] = 'form-control'
 
 
 class FilteringForm(forms.Form):

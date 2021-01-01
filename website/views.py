@@ -129,8 +129,8 @@ def get_date(request):
     if 'filtering_date' in request.POST and request.POST.get('filtering_date') != '':
         date = datetime.strptime(request.POST.get('filtering_date'), '%Y-%m-%d')
         return str(date.day)+'/'+str(date.month)+'/'+str(date.year)
-    elif 'id_reservations_date' in request.POST and request.POST.get('id_reservations_date') != '':
-        date = datetime.strptime(request.POST.get('id_reservations_date'), '%Y-%m-%d')
+    elif 'date' in request.POST and request.POST.get('date') != '':
+        date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d')
         return str(date.day)+'/'+str(date.month)+'/'+str(date.year)
     else:
         date = datetime.now()
