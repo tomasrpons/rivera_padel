@@ -17,7 +17,7 @@ def reservations(request):
         return render(request, "index.html", {'message':'Debe loguearse primero'})
     customers = Customer.objects.all()
     customer = customers.get(user=request.user)
-    my_reservations = Reservation.objects.filter(customer=customer, date__gte=datetime.today())
+    my_reservations = Reservation.objects.filter(customer=customer, date__gte=datetime.today()).order_by('date')
 
     # Ahora verificamos si hizo una consulta
     form = forms.ReservationForm()
@@ -142,7 +142,20 @@ def load_start_times(request):
     if request.GET.get('id_date') != '' and request.GET.get('id_court') != '':
         court_id = request.GET.get('id_court')
         date = request.GET.get('id_date')
-        available_start_times = get_available_start_times(court_id, date)
+
+        today = datetime.today()
+        delta = timedelta(days=14)
+        
+        max_date = today + delta
+
+        date_formated = datetime.strptime(date, '%Y-%m-%d')
+
+        if date_formated+timedelta(days=1) >= today and date_formated+timedelta(days=1) <= max_date: 
+
+            available_start_times = get_available_start_times(court_id, date)
+        
+        else:
+            available_start_times = []
 
         return render(request, 'start_time_dropdown_list_options.html', {'start_times': available_start_times})
     
