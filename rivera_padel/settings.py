@@ -126,8 +126,5 @@ STATICFILES_DIRS = [
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 
 django_heroku.settings(locals())
