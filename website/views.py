@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from website.models import Reservation, Customer, Court, StartTime, MatchDuration
 import pandas as pd
+import numpy as np
 from datetime import date as dt, datetime, time, timedelta
 from django.db.models import Q
 from . import forms
@@ -92,12 +93,24 @@ def create_filled_context(request, date):
 
     data = []
     df = df.fillna(' ')
+
+    customers = Customer.objects.all()
+    customer = customers.get(user=request.user)
+    customer_name = customer.first_name + ' ' + customer.last_name
+
     for reservation in reservations:
         end_time = datetime.combine(dt.today(), reservation.start_time.start_time) + reservation.duration.duration
         df.loc[reservation.start_time.start_time.strftime("%H:%M"):end_time.time().strftime("%H:%M"), reservation.court.court_id] = reservation.customer.first_name + ' ' +reservation.customer.last_name
+    
+    df[1].loc[(df[1] != customer_name) & (df[1] != ' ')] = "Reservado"
+    df[2].loc[(df[2] != customer_name) & (df[2] != ' ')] = "Reservado"
+    df[3].loc[(df[3] != customer_name) & (df[3] != ' ')] = "Reservado"
+
     for i in range(df.shape[0]):
         row = df.iloc[i]
         data.append(dict(row))
+
+
     return data
 
 
@@ -116,9 +129,19 @@ def create_empty_context(request):
 
     data = []
     df = df.fillna(' ')
+
+    customers = Customer.objects.all()
+    customer = customers.get(user=request.user)
+    customer_name = customer.first_name + ' ' + customer.last_name
+
     for reservation in reservations:
         end_time = datetime.combine(dt.today(), reservation.start_time.start_time) + reservation.duration.duration
         df.loc[reservation.start_time.start_time.strftime("%H:%M"):end_time.time().strftime("%H:%M"), reservation.court.court_id] = reservation.customer.first_name + ' ' +reservation.customer.last_name
+
+    df[1].loc[(df[1] != customer_name) & (df[1] != ' ')] = "Reservado"
+    df[2].loc[(df[2] != customer_name) & (df[2] != ' ')] = "Reservado"
+    df[3].loc[(df[3] != customer_name) & (df[3] != ' ')] = "Reservado"
+
     for i in range(df.shape[0]):
         row = df.iloc[i]
         data.append(dict(row))

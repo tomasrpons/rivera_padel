@@ -1,317 +1,138 @@
+{% extends 'base.html' %}
 {%load static%}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+{% block content %}
 
-    <title>Reservas</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700,900"> 
-    <link rel="stylesheet" href="{% static 'website/fonts/icomoon/style.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/magnific-popup.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/jquery-ui.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'website/fonts/flaticon/font/flaticon.css' %}">  
-    <link rel="stylesheet" href="{% static 'website/css/aos.css' %}">
-    <link rel="stylesheet" href="{% static 'website/css/style.css' %}">
-    <link rel="icon" href="{% static 'website/images/favicon.ico' %}">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
-  </head>
-  <body>
-  
-  <div class="site-wrap">
-
-    <div class="site-mobile-menu">
-      <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close mt-3">
-          <span class="icon-close2 js-menu-toggle"></span>
-        </div>
-      </div>
-      <div class="site-mobile-menu-body"></div>
-    </div> <!-- .site-mobile-menu -->
-    
-    <div class="site-navbar-wrap">
-      <div class="site-navbar-top">
-        <div class="container py-2">
-          <div class="row align-items-center">
-            <div class="col-6">
-              <a href="#" class="p-2 pl-0"><span class="icon-twitter"></span></a>
-              <a href="#" class="p-2 pl-0"><span class="icon-facebook"></span></a>
-              <a href="#" class="p-2 pl-0"><span class="icon-linkedin"></span></a>
-              <a href="#" class="p-2 pl-0"><span class="icon-instagram"></span></a>
-            </div>
-            <div class="col-6">
-              <div class="d-flex ml-auto">
-                <a href="https://wa.me/5493516267863" class="d-flex align-items-center ml-auto mr-4">
-                  <span class="flaticon-whatsapp mr-2"></span>
-                  <span class="d-none d-md-inline-block">+54 9 351 626 7863</span>
-                </a>
-                <a style="margin-right: 3%;" href="https://wa.me/5493512046022" class="d-flex align-items-center">
-                  <span class="flaticon-whatsapp mr-2"></span>
-                  <span class="d-none d-md-inline-block">+54 9 351 204 6022</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="site-navbar">
-        <div class="container py-1">
-          <div class="row align-items-center">
-            <div class="col-2">
-              <h2 class="mb-0 site-logo"><a href="/"> </a></h2>
-            </div>
-            <div class="col-10">
-              <nav class="site-navigation text-right" role="navigation">
-                <div class="container">
-                  <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
-
-                  <ul class="site-menu js-clone-nav d-none d-lg-block">
-                    <li><a href="/">Home</a></li>
-                    <li>
-                      <a href="/reservations/">Reservas</a>
-                      {% if message %}
-                      <script>alert("Debe estar logueado para realizar reservas online");</script>
-                      {% endif %}
-                    </li>
-                    <li><a href="/contact/">Cont&aacutectenos</a></li>
-                    <li>
-                      {% if request.user.is_authenticated %}
-                         <a href="{% url 'logout' %}">Logout</a>
-                      {% else %}
-                         <a href="{% url 'login' %}">Login</a>
-                      {% endif %}
-                    </li>
-                  </ul>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="site-blocks-cover inner-page" style="background-image: url({% static 'website/images/hero_bg_4.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <span class="sub-text">Haga su</span>
-            <h1>Reserva <strong>Online</strong></h1>         
-          </div>
-        </div>
-      </div>
-    </div>  
-
-    
-
-    <div class="site-section bg-light">
-      <div class="container">
-        <div class="form-group">
-          <form style="padding-top: 2%; padding-left: 3%; padding-right: 3%;" method="POST" autocomplete="off">
-            {% csrf_token %}
-            <div class="form-group row">
-              <div class="col-md-3">
-                <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#ReservationModal" data-whatever="@mdo" style="margin-bottom: 3%;">Nueva Reserva</button>
-              </div>
-              <div class="col-md-3">
-                <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#DeleteReservationsModal" data-whatever="@fat" style="margin-bottom: 3%;">Mis Reservas</button>              </div>
-              <div class="col-md-3">
-                {{ filtering_form.as_p }}
-              </div>
-              <div class="col-md-3">
-                <input class="btn btn-info btn-md active btn-block" type="submit" name="filtrar" value="Buscar">
-              </div>
-            </div>
-          </form> 
-        </div>
-
-
-        <div class="row row-cols-auto" style="margin-top: 2%;">
-          <div class="modal fade" id="ReservationModal" tabindex="-1" role="dialog" aria-labelledby="ReservationModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="ReservationModalLabel">Nueva Reserva</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
-                    {% csrf_token %}
-                    {{ form.as_p}}
-                    <script>
-                      $(function() {
-                        $( ".datepicker" ).datepicker({
-                          changeMonth: true,
-                          changeYear: true,
-                          yearRange: "1900:2012",
-                    
-                        });
-                      });
-                      </script>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button class="btn btn-info btn-md active  float-right" name="reservar">Reservar</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal fade" id="DeleteReservationsModal" tabindex="-1" role="dialog" aria-labelledby="DeleteReservationsModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="DeleteReservationsModalLabel">Mis Reservas</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form method="POST"> {% csrf_token %}
-                    <table style="font-size: smaller;text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto; width:100%;" border="1" cellpadding="5" cellspacing="5">
-                      <thead>
-                        <tr>
-                          <th>D&iacutea</td>
-                          <th>Cancha</td>
-                          <th>Horario</td>
-                          <th>Duraci&oacuten</td>
-                          <th>Eliminar</th>
-                        </tr>
-                      </thead>
-                      {% for my_reservation in my_reservations %}
-                      <tr>
-                        <td>{{my_reservation.date}}</td>
-                        <td>{{my_reservation.court}}</td>
-                        <td>{{my_reservation.start_time}}</td>
-                        <td>{{my_reservation.duration}}</td>
-                        <td><a href="{% url 'delete_reservation' my_reservation.reservation_id %}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-remove"></span>Eliminar</a>
-                      </td>
-                      </tr>
-                      {% endfor %}
-                    </table>
-                  </form>
-                  <button style="margin-top: 2%;" type="button" class="btn btn-danger float-right" data-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="col form-text text-right" style="font-weight: bold; font-size: xx-large;" >
-            {{ current_date }}
-          </div>
-          <div >
-            <table style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
-              <thead>
-                <tr>
-                  <th width="50px">Hora</td>
-                  <th width="353px">Cancha Techada</td>
-                  <th width="353px">Cancha Sint&eacutetico</td>
-                  <th width="353px">Cancha Cemento</td>
-                </tr>
-              </thead>
-              {% for reservation in reservations %}
-              <tr style="font-size: medium;">
-                <td>{{reservation.time}}</td>
-                <td>{{reservation.1}}</td>
-                <td>{{reservation.2}}</td>
-                <td>{{reservation.3}}</td>
-              </tr>
-              {% endfor %}
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="site-section site-block-3">
-      <div class="row pt-5 mt-5 text-center">
-        <div class="col-md-12">
-          <p>
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          Copyright &copy;<script data-cfasync="false"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          </p>
-          {% if form.errors %}
-            {% for field in form %}
-              {% for error in field.errors %}
-                <p> {{ error }} </p>
-              {% endfor %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        
+<div class="site-blocks-cover" style="background-image: url({% static 'website/images/hero_bg_4.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <span class="sub-text">Haga su</span>
+        <h1>Reserva <strong>Online</strong></h1>         
       </div>
     </div>
   </div>
-
-  <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery-migrate-3.0.1.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery-ui.js' %}"></script>
-  <script src="{% static 'website/js/popper.min.js' %}"></script>
-  <script src="{% static 'website/js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'website/js/owl.carousel.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery.stellar.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery.countdown.min.js' %}"></script>
-  <script src="{% static 'website/js/jquery.magnific-popup.min.js' %}"></script>
-  <script src="{% static 'website/js/aos.js' %}"></script>
-
-
-  <script src="{% static 'website/js/main.js' %}"></script>
-
-  <script>
-    function load_start() {
-      const url = $("#form1").attr("data-start_time-url");
-        const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("id_reservations_date").value;
-
-        $.ajax({     
-            url: url,
-            data: {
-                'id_court': CourtId,
-                'id_date': DateId
-              },
-            success: function (data) {
-                $("#id_start_time").html(data);
-            }
-        });
-    }
-
-    function load_durations() {
-      const url = $("#form1").attr("data-duration-url");
-        const CourtId = document.getElementById("id_court").value;
-        const DateId = document.getElementById("id_reservations_date").value;
-        const StartId = document.getElementById("id_start_time").value;
-
-        $.ajax({     
-            url: url,
-            data: {
-                'id_court': CourtId,
-                'id_date': DateId,
-                'id_start_time': StartId
-              },
-            success: function (data) {
-                $("#id_duration").html(data);
-            }
-        });
-    }
-
-    function listenForChanges(){
-      $('#id_court').change(load_start);
-      $('#id_reservations_date').change(load_start);
-      $('#id_start_time').change(load_durations);
-    }
-
-    $(document).ready(listenForChanges);
+</div>  
 
 
 
-  </script>  
-    
-  </body>
-</html>
+<div class="site-block-1 bg-light">
+  <div class="container">
+    <div class="form-group">
+      <form style="padding-top: 2%; padding-left: 3%; padding-right: 3%;" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group row">
+          <div class="col-md-3">
+            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#ReservationModal" data-whatever="@mdo" style="margin-bottom: 3%;">Nueva Reserva</button>
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#DeleteReservationsModal" data-whatever="@fat" style="margin-bottom: 3%;">Mis Reservas</button>              </div>
+          <div class="col-md-3">
+            {{ filtering_form.as_p }}
+          </div>
+          <div class="col-md-3">
+            <input class="btn btn-info btn-md active btn-block" type="submit" name="filtrar" value="Buscar">
+          </div>
+        </div>
+      </form> 
+    </div>
+
+
+    <div class="row row-cols-auto" style="margin-top: 2%;">
+      <div class="modal fade" id="ReservationModal" tabindex="-1" role="dialog" aria-labelledby="ReservationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ReservationModalLabel">Nueva Reserva</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <script>
+                  $(function() {
+                    $( ".datepicker" ).datepicker({
+                      changeMonth: true,
+                      changeYear: true,
+                      yearRange: "1900:2012",
+                
+                    });
+                  });
+                  </script>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-info btn-md active  float-right" name="reservar">Reservar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="DeleteReservationsModal" tabindex="-1" role="dialog" aria-labelledby="DeleteReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="DeleteReservationsModalLabel">Mis Reservas</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST"> {% csrf_token %}
+                <table style="font-size: smaller;text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto; width:100%;" border="1" cellpadding="5" cellspacing="5">
+                  <thead>
+                    <tr>
+                      <th>D&iacutea</td>
+                      <th>Cancha</td>
+                      <th>Horario</td>
+                      <th>Duraci&oacuten</td>
+                      <th>Eliminar</th>
+                    </tr>
+                  </thead>
+                  {% for my_reservation in my_reservations %}
+                  <tr>
+                    <td>{{my_reservation.date}}</td>
+                    <td>{{my_reservation.court}}</td>
+                    <td>{{my_reservation.start_time}}</td>
+                    <td>{{my_reservation.duration}}</td>
+                    <td><a href="{% url 'delete_reservation' my_reservation.reservation_id %}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-remove"></span>Eliminar</a>
+                  </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </form>
+              <button style="margin-top: 2%;" type="button" class="btn btn-danger float-right" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="col form-text text-right" style="font-weight: bold; font-size: xx-large;" >
+        {{ current_date }}
+      </div>
+      <div >
+        <table style="text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto;" border="1" cellpadding="5" cellspacing="5" style="width:100%">
+          <thead>
+            <tr>
+              <th width="50px">Hora</td>
+              <th width="353px">Cancha Techada</td>
+              <th width="353px">Cancha Sint&eacutetico</td>
+              <th width="353px">Cancha Cemento</td>
+            </tr>
+          </thead>
+          {% for reservation in reservations %}
+          <tr style="font-size: medium;">
+            <td>{{reservation.time}}</td>
+            <td>{{reservation.1}}</td>
+            <td>{{reservation.2}}</td>
+            <td>{{reservation.3}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
