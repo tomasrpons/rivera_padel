@@ -30,8 +30,16 @@
             {{ filtering_form.as_p }}
           </div>
           <div class="col-md-3">
-            <input class="btn btn-info btn-md active btn-block" type="submit" name="filtrar" value="Buscar">
+            <input class="btn btn-info btn-md active btn-block" type="submit" name="filtrar" value="Buscar" style="margin-bottom: 3%;">
           </div>
+          {% if request.user.is_superuser %}
+          <div class="col-md-3">
+            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#FixedReservationModal" data-whatever="@mdo" style="margin-bottom: 3%;">Nueva Reserva Fija</button>
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-info btn-md active btn-block" data-toggle="modal" data-target="#DeleteFixedReservationsModal" data-whatever="@fat" style="margin-bottom: 3%;">Mis Reservas Fijas</button>
+          </div>
+          {% endif %}
         </div>
       </form> 
     </div>
@@ -50,7 +58,36 @@
             <div class="modal-body">
               <form method="POST" style="padding: 10%;" autocomplete="off" id="form1" data-start_time-url="{% url 'ajax_load_start_times' %}" data-duration-url="{% url 'ajax_load_durations' %}">
                 {% csrf_token %}
-                {{ form.as_p}}
+                {{ reservation_form.as_p}}
+                <script>
+                  $(function() {
+                    $( ".datepicker" ).datepicker({
+                      changeMonth: true,
+                      changeYear: true,
+                      yearRange: "1900:2012",
+                    });
+                  });
+                  </script>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-info btn-md active  float-right" name="reservar">Reservar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="FixedReservationModal" tabindex="-1" role="dialog" aria-labelledby="FixedReservationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="FixedReservationModalLabel">Nueva Reserva Fija</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" style="padding: 10%;" autocomplete="off" id="form2" data-start_time-url="{% url 'ajax_load_fixed_start_times' %}" data-duration-url="{% url 'ajax_load_fixed_durations' %}">
+                {% csrf_token %}
+                {{ fixed_reservation_form.as_p}}
                 <script>
                   $(function() {
                     $( ".datepicker" ).datepicker({
@@ -96,6 +133,44 @@
                     <td>{{my_reservation.start_time}}</td>
                     <td>{{my_reservation.duration}}</td>
                     <td><a href="{% url 'delete_reservation' my_reservation.reservation_id %}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-remove"></span>Eliminar</a>
+                  </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </form>
+              <button style="margin-top: 2%;" type="button" class="btn btn-danger float-right" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="DeleteFixedReservationsModal" tabindex="-1" role="dialog" aria-labelledby="DeleteFixedReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="DeleteFixedReservationsModalLabel">Mis Reservas</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST"> {% csrf_token %}
+                <table style="font-size: smaller;text-align: center; background-color: whitesmoke; border:1px solid black;margin-left:auto;margin-right:auto; width:100%;" border="1" cellpadding="5" cellspacing="5">
+                  <thead>
+                    <tr>
+                      <th>D&iacutea</td>
+                      <th>Cancha</td>
+                      <th>Horario</td>
+                      <th>Duraci&oacuten</td>
+                      <th>Eliminar</th>
+                    </tr>
+                  </thead>
+                  {% for my_fixed_reservation in my_fixed_reservations %}
+                  <tr>
+                    <td>{{my_fixed_reservation.date}}</td>
+                    <td>{{my_fixed_reservation.court}}</td>
+                    <td>{{my_fixed_reservation.start_time}}</td>
+                    <td>{{my_fixed_reservation.duration}}</td>
+                    <td><a href="{% url 'delete_fixed_reservation' my_fixed_reservation.reservation_id %}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-remove"></span>Eliminar</a>
                   </td>
                   </tr>
                   {% endfor %}

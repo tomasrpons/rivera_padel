@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from website.models import Reservation, Customer, Court, StartTime, MatchDuration
+from website.models import Reservation, Customer, Court, StartTime, MatchDuration, FixedReservation
 import pandas as pd
 import numpy as np
 from datetime import date as dt, datetime, time, timedelta
@@ -19,20 +19,23 @@ def reservations(request):
     customers = Customer.objects.all()
     customer = customers.get(user=request.user)
     my_reservations = Reservation.objects.filter(customer=customer, date__gte=datetime.today()).order_by('date')
+    my_fixed_reservations = FixedReservation.objects.filter(customer=customer)
 
     # Ahora verificamos si hizo una consulta
     form = forms.ReservationForm()
+    fixed_reservation_form = forms.FixedReservationForm()
 
     reservations = Reservation.objects.all()
     
     if request.method == "GET":
-        context = {'reservations':create_empty_context(request), 'form':form, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+        context = {'reservations':create_empty_context(request), 'reservation_form':form, 'current_date':get_date(request),
+                    'filtering_form':forms.FilteringForm(), 'fixed_reservation_form':fixed_reservation_form,'my_reservations':my_reservations, 
+                    'my_fixed_reservations':my_fixed_reservations}
 
         return render(request, "reservations.html",context)
     elif request.method == "POST" and 'filtrar' in request.POST:
-        context = {'reservations':create_filled_context(request, request.POST.get('filtering_date')), 'form':form, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+        context = {'reservations':create_filled_context(request, request.POST.get('filtering_date')), 'fixed_reservation_form':fixed_reservation_form, 'reservation_form':form, 'current_date':get_date(request),
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations, 'my_fixed_reservations':my_fixed_reservations}
 
         return render(request, "reservations.html", context)
     elif request.method == "POST" and 'reservar' in request.POST:
@@ -43,25 +46,26 @@ def reservations(request):
             if Reservation.objects.filter(date=form['date'].value(), customer=customer).count() >= 3:
                 message = "No se permiten más de 3 reservas al día por cliente."
                 context = {'reservations':create_filled_context(request, form['date'].value()), 
-                                                            'form':forms.ReservationForm, 'current_date':get_date(request),
-                                                            'message':message, 'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations}
+                                                            'reservation_form':forms.ReservationForm, 'current_date':get_date(request),
+                                                            'message':message, 'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations,
+                                                            'fixed_reservation_form':fixed_reservation_form, 'my_fixed_reservations':my_fixed_reservations}
 
                 return render(request, "reservations.html", context)
 
             reservation.customer = customer
             reservation.save()
-            context = {'reservations':create_filled_context(request, form['date'].value()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                        'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+            context = {'reservations':create_filled_context(request, form['date'].value()), 'reservation_form':forms.ReservationForm, 'current_date':get_date(request),
+                        'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations, 'fixed_reservation_form':fixed_reservation_form,'my_fixed_reservations':my_fixed_reservations} 
 
             return render(request, "reservations.html",context)
-        context = {'reservations':create_filled_context(request, form['date'].value()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+        context = {'reservations':create_filled_context(request, form['date'].value()), 'reservation_form':forms.ReservationForm, 'current_date':get_date(request),
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations,'fixed_reservation_form':fixed_reservation_form,'my_fixed_reservations':my_fixed_reservations} 
 
         return render(request, "reservations.html",context)
 
     else:
-        context = {'reservations':create_filled_context(request, datetime.now()), 'form':forms.ReservationForm, 'current_date':get_date(request),
-                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations} 
+        context = {'reservations':create_filled_context(request, datetime.now()), 'reservation_form':forms.ReservationForm, 'current_date':get_date(request),
+                    'filtering_form':forms.FilteringForm(), 'my_reservations':my_reservations,'fixed_reservation_form':fixed_reservation_form,'my_fixed_reservations':my_fixed_reservations} 
 
         return render(request, "reservations.html",context)
 
@@ -75,6 +79,14 @@ def delete_reservation(request, pk):
 
     reservation = Reservation.objects.get(reservation_id=pk)
     reservation.delete()
+    return redirect('/reservations/')
+
+def delete_fixed_reservation(request, pk):
+    if request.user.is_authenticated == False:
+        return render(request, "index.html", {'message':'Debe loguearse primero'})
+
+    fixed_reservation = FixedReservation.objects.get(reservation_id=pk)
+    fixed_reservation.delete()
     return redirect('/reservations/')
 
 
@@ -162,6 +174,31 @@ def get_date(request):
 
     # AJAX
 def load_start_times(request):
+    if request.GET.get('id_reservations_date') != '' and request.GET.get('id_court') != '':
+        court_id = request.GET.get('id_court')
+        date = request.GET.get('id_reservations_date')
+
+        today = datetime.today()
+        delta = timedelta(days=14)
+        
+        max_date = today + delta
+
+        date_formated = datetime.strptime(date, '%Y-%m-%d')
+
+        if date_formated+timedelta(days=1) >= today and date_formated+timedelta(days=1) <= max_date: 
+
+            available_start_times = get_available_start_times(court_id, date)
+        
+        else:
+            available_start_times = []
+
+        return render(request, 'start_time_dropdown_list_options.html', {'start_times': available_start_times})
+    
+    else:
+        return render(request, 'start_time_dropdown_list_options.html', {'start_times': []})
+
+#AJAX
+def load_fixed_start_times(request):
     if request.GET.get('id_date') != '' and request.GET.get('id_court') != '':
         court_id = request.GET.get('id_court')
         date = request.GET.get('id_date')
@@ -187,6 +224,19 @@ def load_start_times(request):
 
     # AJAX
 def load_durations(request):
+    if request.GET.get('id_date') != '' and request.GET.get('id_court') != '' and request.GET.get('id_start_time') != '':
+        court_id = request.GET.get('id_court')
+        date = request.GET.get('id_date')
+        start_time_id = int(request.GET.get('id_start_time'))
+        available_durations = get_available_durations(court_id, date, start_time_id)
+
+        return render(request, 'durations_dropdown_list_options.html', {'durations': available_durations})
+    
+    else:
+        return render(request, 'durations_dropdown_list_options.html', {'durations': []})
+
+    # AJAX
+def load_fixed_durations(request):
     if request.GET.get('id_date') != '' and request.GET.get('id_court') != '' and request.GET.get('id_start_time') != '':
         court_id = request.GET.get('id_court')
         date = request.GET.get('id_date')
