@@ -30,17 +30,17 @@ class ReservationForm(forms.ModelForm):
 class FixedReservationForm(forms.ModelForm):
     class Meta:
         model = FixedReservation
-        fields = ('fixed_court','date','start_time','duration')
+        fields = ('fixed_court','fixed_date','fixed_start_time','fixed_duration')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['start_time'].queryset = StartTime.objects.all()
-        self.fields['duration'].queryset = MatchDuration.objects.all()
+        self.fields['fixed_start_time'].queryset = StartTime.objects.all()
+        self.fields['fixed_duration'].queryset = MatchDuration.objects.all()
         self.fields['fixed_court'].queryset = Court.objects.all()
 
-        self.fields['date'].widget.attrs['class'] = 'form-control'
-        self.fields['start_time'].widget.attrs['class'] = 'form-control'
-        self.fields['duration'].widget.attrs['class'] = 'form-control'
+        self.fields['fixed_date'].widget.attrs['class'] = 'form-control'
+        self.fields['fixed_start_time'].widget.attrs['class'] = 'form-control'
+        self.fields['fixed_duration'].widget.attrs['class'] = 'form-control'
         self.fields['fixed_court'].widget.attrs['class'] = 'form-control'
 
 

@@ -174,9 +174,9 @@ def get_date(request):
 
     # AJAX
 def load_start_times(request):
-    if request.GET.get('id_reservations_date') != '' and request.GET.get('id_court') != '':
+    if request.GET.get('id_date') != '' and request.GET.get('id_court') != '':
         court_id = request.GET.get('id_court')
-        date = request.GET.get('id_reservations_date')
+        date = request.GET.get('id_date')
 
         today = datetime.today()
         delta = timedelta(days=14)

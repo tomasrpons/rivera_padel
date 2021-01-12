@@ -54,9 +54,9 @@ class Reservation(models.Model):
         return reverse('reservations')
 
 class FixedReservation(models.Model):
-    reservation_id = models.AutoField(primary_key=True)
-    start_time = models.ForeignKey(StartTime, on_delete=models.CASCADE, verbose_name='Hora de Inicio')
-    duration = models.ForeignKey(MatchDuration, on_delete=models.CASCADE, verbose_name='Duracion')
+    fixed_reservation_id = models.AutoField(primary_key=True)
+    fixed_start_time = models.ForeignKey(StartTime, on_delete=models.CASCADE, verbose_name='Hora de Inicio')
+    fixed_duration = models.ForeignKey(MatchDuration, on_delete=models.CASCADE, verbose_name='Duracion')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Cliente',null=True, blank=True)
     fixed_court = models.ForeignKey(Court, on_delete=models.CASCADE, verbose_name='Cancha')
-    date = models.CharField(choices=day_choices,max_length=15,blank=True,null=True, verbose_name='Fecha Fija')
+    fixed_date = models.CharField(choices=day_choices,max_length=15,blank=True,null=True, verbose_name='Fecha Fija')
